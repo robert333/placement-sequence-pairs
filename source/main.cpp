@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	Algorithm::output(std::cout, instance);
+//	Algorithm::output(std::cout, instance);
 
 	Placement const placement = Algorithm::compute_minimum_placement(instance);
 
@@ -40,23 +40,16 @@ int main(int argc, char* argv[])
 
 	if (argc > 2 and std::string(argv[2]) == "gnuplot") {
 		std::ofstream gnuplot_file(instance_filepath + "_gnuplot");
-
 		assert(gnuplot_file.is_open());
+
 		Algorithm::gnuplot(gnuplot_file, instance, placement, instance_filepath);
+
 		gnuplot_file.close();
 
 		std::string const command = "gnuplot -persistent " + instance_filepath + "_gnuplot";
 
 		std::cout << "for gnuplot use the following command:\n"
 				  << command << "\n";
-
-
-		//DEBUG
-		int status = system(command.c_str());
-		assert(not status);
-
-		std::cout << "Enter to exit the program...";
-		std::cin.ignore().get();
 	}
 
 	return 0;

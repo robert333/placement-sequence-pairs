@@ -44,6 +44,8 @@ void SequencePair::update_graphs(Graph& graph_minus, Graph& graph_plus)
 	graph_plus.reset();
 
 	// minus
+	// "before" encodes whether module gamma_minus().at(j) is before module gamma_plus().at(i) in the first permutation
+	// and gamma_minus().at(j) != gamma_plus().at(i) ensures the same relation in the other permutation
 	for (std::size_t i = 0; i < length(); ++i) {
 		for (std::size_t j = 0; gamma_minus().at(j) != gamma_plus().at(i); ++j) {
 			if (_before.get(gamma_minus().at(j))) {
@@ -57,6 +59,8 @@ void SequencePair::update_graphs(Graph& graph_minus, Graph& graph_plus)
 	_before.reset();
 
 	// plus
+	// "before" encodes whether module gamma_plus().at(i) is before module gamma_minus().at(j) in the first permutation
+	// and gamma_plus().at(i) != gamma_minus().at(j) ensures the opposite relation in the other permutation
 	for (std::size_t j = 0; j < length(); ++j) {
 		for (std::size_t i = length() - 1; gamma_plus().at(i) != gamma_minus().at(j); --i) {
 			if (_before.get(gamma_plus().at(i))) {
@@ -68,7 +72,4 @@ void SequencePair::update_graphs(Graph& graph_minus, Graph& graph_plus)
 	}
 
 	_before.reset();
-
-//			graphHorizontal.removeAllTransitiveClosureEdges ();
-//			graphVertical  .removeAllTransitiveClosureEdges ();
 }

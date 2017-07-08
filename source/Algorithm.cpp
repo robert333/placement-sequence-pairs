@@ -20,35 +20,36 @@ Placement Algorithm::compute_minimum_placement(Instance const& instance)
 	std::vector<Weight> lengths_horizontal(num_rectangles + 1);
 	std::vector<Weight> lengths_vertical(num_rectangles + 1);
 
-//	Weight min_width = std::min_element(instance.widths().begin(), instance.widths().end()).operator*();
-//	Weight min_height = std::min_element(instance.heights().begin(), instance.heights().end()).operator*();
-
-//	Weight max_width = std::max_element(instance.widths().begin(), instance.widths().end()).operator*();
-	Weight max_height = std::max_element(instance.heights().begin(), instance.heights().end()).operator*();
-
-	Weight max_area_horizontal = static_cast<Weight>(std::accumulate(instance.widths().begin(), instance.widths().end(), 0));
-//	Weight max_area_vertical = static_cast<Weight>(std::accumulate(instance.heights().begin(), instance.heights().end(), 0));
+	Weight const max_height = std::max_element(instance.heights().begin(), instance.heights().end()).operator*();
+	Weight const max_area_horizontal = static_cast<Weight>(std::accumulate(instance.widths().begin(), instance.widths().end(), 0));
 
 	std::vector<Weight> min_lengths_horizontal(num_rectangles + 1, std::numeric_limits<Weight>::max());
 	std::vector<Weight> min_lengths_vertical(num_rectangles + 1, std::numeric_limits<Weight>::max());
 
 	Weight current_min_area = max_area_horizontal * max_height;
 
-	// output number of cases which must be checked
-	Weight cases = 1;
-	for (std::size_t i = 0; i < num_rectangles; ++i) {
-		cases *= i + 1;
-	}
-	cases *= cases;
+//	// output number of cases which must be checked
+//	Weight cases = 1;
+//	for (std::size_t i = 0; i < num_rectangles; ++i) {
+//		cases *= i + 1;
+//	}
+//	cases *= cases;
+//
+//	std::cout << "There will be checked " << cases << " cases:\n\n";
+//
+//	// initialize progress variable
+//	Weight k = 0;
+//	Weight p = 0;
+//
+//	std::chrono::high_resolution_clock::time_point const time_start_point = std::chrono::high_resolution_clock::now();
 
-	std::cout << "There will be checked " << cases << " cases:\n\n";
-
-	// initialize progress variable
-	Weight k = 0;
-	Weight p = 0;
-
-	std::chrono::high_resolution_clock::time_point const time_start_point = std::chrono::high_resolution_clock::now();
-
+	//
+	// CORE ALGORITHM
+	//
+	// consider all possible sequence pairs
+	// create induced placement graph for both dimensions
+	// check the longest path and decide whether the placement is feasible and better as the current best one
+	//
 	do {
 		do {
 			sequence_pair.update_graphs(graph_horizontal, graph_vertical);
@@ -63,11 +64,11 @@ Placement Algorithm::compute_minimum_placement(Instance const& instance)
 				}
 			}
 
-			// output progress
-			if (++k >= cases / 10 * (p + 1)) {
-				std::chrono::high_resolution_clock::time_point const time_stop_point = std::chrono::high_resolution_clock::now();
-				std::cout << "progress: " << ++p << "0% (" << std::chrono::duration_cast<std::chrono::seconds>(time_stop_point - time_start_point).count() << " sec) current area size: " << current_min_area << "\n";
-			}
+//			// output progress
+//			if (++k >= cases / 10 * (p + 1)) {
+//				std::chrono::high_resolution_clock::time_point const time_stop_point = std::chrono::high_resolution_clock::now();
+//				std::cout << "progress: " << ++p << "0% (" << std::chrono::duration_cast<std::chrono::seconds>(time_stop_point - time_start_point).count() << " sec) current area size: " << current_min_area << "\n";
+//			}
 		} while (sequence_pair.next_gamma_plus());
 	} while (sequence_pair.next_gamma_minus());
 

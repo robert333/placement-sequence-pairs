@@ -21,6 +21,17 @@ public:
 
 	void add_neighbour(std::size_t const& vertex, std::size_t const& neighbour);
 
+	/**
+	 * Computes the longest path in the current graph assuming that it is acyclic
+	 *
+	 * first a topological order is computed in time in O(n^2)
+	 * then the lengths are computed in O(n^2)
+	 * in both steps we need O(n^2) time as the number of edges might be in O(n^2)
+	 *
+	 * @param lengths vector for saving the computed potential of each vertex
+	 * @param upper_bound an upper bound to stop as soon as the algorithm finds a longer path
+	 * @return true iff the upper bound is not reached
+	 */
 	bool compute_longest_paths(std::vector<Weight>& lengths, Weight const& upper_bound);
 
 private:
